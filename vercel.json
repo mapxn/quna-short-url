@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/index.py"
+    }
+  ],
+  "functions": {
+    "api/index.py": {
+      "includeFiles": "lib/dao.py",
+      "memory": 512,
+      "maxDuration": 10
+    }
+  }
+}
