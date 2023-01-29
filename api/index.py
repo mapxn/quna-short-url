@@ -1,7 +1,6 @@
 import json
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
-from typing import Union
 from pydantic import BaseModel
 
 from lib.dao import get_item_by_key, get_all_item, delete_item_by_key, delete_item_by_keys, add_item_by_key_value, \
@@ -11,7 +10,7 @@ app = FastAPI(docs_url=None, redoc_url=None)
 
 
 class UrlObject(BaseModel):
-    value: Union[str, None] = None
+    value: str
 
 
 class DelList(BaseModel):
