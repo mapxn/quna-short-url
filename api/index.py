@@ -6,7 +6,8 @@ from pydantic import BaseModel
 from lib.dao import get_item_by_key, get_all_item, delete_item_by_key, delete_item_by_keys, add_item_by_key_value, \
     update_item_by_key
 
-app = FastAPI(docs_url=None, redoc_url=None)
+#app = FastAPI(docs_url=None, redoc_url=None)
+app = FastAPI()
 
 
 class UrlObject(BaseModel):
@@ -124,7 +125,7 @@ async def add_item(item_id: str, body: UrlObject):
 
 
 @app.put("/api/{item_id}")
-async def add_item(item_id: str, body: UrlObject):
+async def update_item(item_id: str, body: UrlObject):
     key = item_id
     value = body.value
     result = update_item_by_key(key, value)
