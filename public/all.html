@@ -13,9 +13,23 @@
       padding: 8px;
       text-align: left;
     }
+
+    .add-form {
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
+  <div class="add-form">
+    <label for="urlInput">URL:</label>
+    <input type="text" id="urlInput">
+
+    <label for="ckeyInput">Ckey:</label>
+    <input type="text" id="ckeyInput">
+
+    <button id="addButton">添加</button>
+  </div>
+
   <table>
     <thead>
       <tr>
@@ -35,6 +49,7 @@
   <script>
     const apiUrl = 'https://quna.cf/api/url/';
     const deleteUrl = 'https://quna.cf/api/url/';
+    const addUrl = 'https://quna.cf/api/';
 
     // 使用fetch函数获取item数据
     fetch(apiUrl)
@@ -173,8 +188,45 @@
         });
     }
 
+    // 添加item
+    function addItem() {
+      const urlInput = document.getElementById('urlInput');
+      const ckeyInput = document.getElementById('ckeyInput');
+
+      const value = urlInput.value;
+      const item_id = ckeyInput.value;
+
+      const postData = {
+        value: value
+      };
+
+      fetch(`${addUrl}/${item_id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(postData)
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert(`${value}已经添加短链接https://quna.cf/${item_id} !`);
+            urlInput.value = '';
+            ckeyInput.value = '';
+          } else {
+            throw new Error(data.message);
+          }
+        })
+        .catch(error => {
+          alert('添加失败：' + error.message);
+        });
+    }
+
     const deleteSelectedButton = document.getElementById('deleteSelectedButton');
     deleteSelectedButton.addEventListener('click', deleteSelectedItems);
+
+    const addButton = document.getElementById('addButton');
+    addButton.addEventListener('click', addItem);
   </script>
 </body>
 </html>
