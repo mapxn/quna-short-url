@@ -232,7 +232,7 @@
         const input2Value = document.getElementById('input2').value;
 
         // 构建请求的URL
-        const url = 'https://quna.cf/api/url/' + input2Value;
+        const url = 'https://quna.cf/api/' + input2Value;
 
         // 构建请求的数据
         const data = {
@@ -249,10 +249,13 @@
         })
           .then(response => {
             if (response.ok) {
-              alert('添加成功！');
+              // 请求成功的处理逻辑
+              const shortLink = 'https://quna.cf/' + input2Value;
+              alert('已经生成短链接：' + shortLink);
               location.reload(); // 刷新页面以更新表格
             } else {
-              throw new Error('添加失败！');
+              // 请求失败的处理逻辑
+              throw new Error('请求失败: ' + response.status);
             }
           })
           .catch(error => {
