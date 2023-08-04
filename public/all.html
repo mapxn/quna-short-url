@@ -155,37 +155,40 @@
     // 批量删除选中的item
     function deleteSelectedItems() {
       const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-      const keys = [];
+      const selectedItems = [];
 
       checkboxes.forEach(checkbox => {
         if (checkbox.checked) {
           const key = checkbox.parentElement.nextElementSibling.textContent;
-          keys.push(key);
+          selectedItems.push(key);
         }
       });
 
-      const deleteData = {
-        keys: keys
-      };
+      const confirmDelete = confirm(`确定要删除这${selectedItems.length}个item吗？`);
+      if (confirmDelete) {
+        const deleteData = {
+          keys: selectedItems
+        };
 
-      fetch(deleteUrl, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(deleteData)
-      })
-        .then(response => {
-          if (response.ok) {
-            alert('批量删除成功！');
-            location.reload(); // 刷新页面以更新表格
-          } else {
-            throw new Error('批量删除失败！');
-          }
+        fetch(deleteUrl, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(deleteData)
         })
-        .catch(error => {
-          console.error('Error:', error);
-        });
+          .then(response => {
+            if (response.ok) {
+              alert('批量删除成功！');
+              location.reload(); // 刷新页面以更新表格
+            } else {
+              throw new Error('批量删除失败！');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
     }
 
     // 添加item
