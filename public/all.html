@@ -42,8 +42,8 @@
         <th></th>
         <th>Key</th>
         <th>Value</th>
-        <th>Created At</th>
-        <th>Updated At</th>
+        <th>创建时间</th>
+        <th>更新时间</th>
         <th>操作</th>
       </tr>
     </thead>
@@ -59,7 +59,7 @@
     // 转换时间格式为北京时间
     function convertToBeijingTime(utcTimeString) {
       const utcDate = new Date(utcTimeString);
-      const beijingOffset = 8 * 60; // 北京时间偏移量为8小时
+      const beijingOffset = 0 * 8 * 60; // 北京时间偏移量为8小时
       const beijingDate = new Date(utcDate.getTime() + beijingOffset * 60 * 1000);
       return beijingDate.toLocaleString('en-US', { timeZone: 'Asia/Shanghai' });
     }
