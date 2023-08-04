@@ -56,6 +56,25 @@
     const apiUrl = 'https://quna.cf/api/url/';
     const deleteUrl = 'https://quna.cf/api/url/';
 
+    // 转换时间格式为北京时间
+    function convertToBeijingTime(utcTimeString) {
+      const utcDate = new Date(utcTimeString);
+      const beijingOffset = 8 * 60; // 北京时间偏移量为8小时
+      const beijingDate = new Date(utcDate.getTime() + beijingOffset * 60 * 1000);
+      return beijingDate.toLocaleString('en-US', { timeZone: 'Asia/Shanghai' });
+    }
+
+    // 更新表格中的时间格式
+    function updateTableTimeFormat() {
+      const timeCells = document.querySelectorAll('td:nth-child(4), td:nth-child(5)');
+
+      timeCells.forEach(cell => {
+        const utcTimeString = cell.textContent;
+        const beijingTimeString = convertToBeijingTime(utcTimeString);
+        cell.textContent = beijingTimeString;
+      });
+    }
+
     // 使用fetch函数获取item数据
     fetch(apiUrl)
       .then(response => response.json())
@@ -111,6 +130,9 @@
           // 将行添加到表格主体
           itemTableBody.appendChild(row);
         });
+
+        // 更新表格中的时间格式
+        updateTableTimeFormat();
       })
       .catch(error => {
         console.error('Error:', error);
@@ -210,7 +232,7 @@
         const input2Value = document.getElementById('input2').value;
 
         // 构建请求的URL
-        const url = 'https://quna.cf/api/' + input2Value;
+        const url = 'https://quna.cf/api/url/' + input2Value;
 
         // 构建请求的数据
         const data = {
@@ -227,13 +249,10 @@
         })
           .then(response => {
             if (response.ok) {
-              // 请求成功的处理逻辑
-              const shortLink = 'https://quna.cf/' + input2Value;
-              alert('已经生成短链接：' + shortLink);
+              alert('添加成功！');
               location.reload(); // 刷新页面以更新表格
             } else {
-              // 请求失败的处理逻辑
-              throw new Error('请求失败: ' + response.status);
+              throw new Error('添加失败！');
             }
           })
           .catch(error => {
