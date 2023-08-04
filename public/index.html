@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>发送POST请求示例</title>
+  <title>quna短网址</title>
 </head>
 <body>
   <form id="myForm">
-    <label for="input1">url:</label>
-    <input type="text" id="input1" name="input1">
-    <label for="input2">ckey:</label>
-    <input type="text" id="input2" name="input2">
+    <label for="input1">URL:</label>
+    <input type="text" id="input1" name="input1" value="请输入原始链接">
+    <label for="input2">Ckey:</label>
+    <input type="text" id="input2" name="input2" value="请输入ckey">
     <input type="submit" value="提交">
   </form>
 
@@ -38,7 +38,8 @@
         xhr.onload = function() {
           if (xhr.status === 200) {
             // 请求成功的处理逻辑
-            console.log(xhr.responseText);
+            var shortLink = 'https://quna.cf/' + input2Value;
+            alert('已经生成短链接：' + shortLink);
           } else {
             // 请求失败的处理逻辑
             console.log('请求失败: ' + xhr.status);
