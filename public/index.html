@@ -5,10 +5,10 @@
 </head>
 <body>
   <form id="myForm">
-    <label for="input1">输入1:</label>
-    <input type="text" id="input1" name="input1"><br><br>
-    <label for="input2">输入2:</label>
-    <input type="text" id="input2" name="input2"><br><br>
+    <label for="input1">url:</label>
+    <input type="text" id="input1" name="input1">
+    <label for="input2">ckey:</label>
+    <input type="text" id="input2" name="input2">
     <input type="submit" value="提交">
   </form>
 
@@ -25,6 +25,11 @@
 
         // 构建请求的URL
         var url = 'https://quna.cf/api/' + input2Value;
+
+        // 构建请求的数据
+        var data = {
+          value: input1Value
+        };
 
         // 发送POST请求
         var xhr = new XMLHttpRequest();
@@ -43,7 +48,7 @@
           // 请求失败的处理逻辑
           console.log('请求失败');
         };
-        xhr.send(JSON.stringify(input1Value));
+        xhr.send(JSON.stringify(data));
       });
     });
   </script>
