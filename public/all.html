@@ -19,6 +19,7 @@
   <table>
     <thead>
       <tr>
+        <th></th>
         <th>Key</th>
         <th>Value</th>
         <th>Created At</th>
@@ -29,8 +30,11 @@
     <tbody id="itemTableBody"></tbody>
   </table>
 
+  <button id="deleteSelectedButton" disabled>批量删除</button>
+
   <script>
     const apiUrl = 'https://quna.cf/api/url/';
+    const deleteUrl = 'https://quna.cf/api/url/';
 
     // 使用fetch函数获取item数据
     fetch(apiUrl)
@@ -41,6 +45,17 @@
         // 遍历item数组并创建表格行
         data.forEach(item => {
           const row = document.createElement('tr');
+
+          // 创建复选框
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.addEventListener('change', () => {
+            updateDeleteSelectedButtonState();
+          });
+
+          const checkboxCell = document.createElement('td');
+          checkboxCell.appendChild(checkbox);
+          row.appendChild(checkboxCell);
 
           // 创建单元格并填充数据
           const keyCell = document.createElement('td');
@@ -65,7 +80,7 @@
           deleteButton.addEventListener('click', () => {
             const confirmDelete = confirm('确定要删除这个item吗？');
             if (confirmDelete) {
-              deleteItem(item.id, item.key);
+              deleteItem(item.key);
             }
           });
 
@@ -82,11 +97,17 @@
       });
 
     // 删除item
-    function deleteItem(itemId, itemValue) {
-      const deleteUrl = `https://quna.cf/api/${itemValue}`;
+    function deleteItem(key) {
+      const deleteData = {
+        keys: [key]
+      };
 
       fetch(deleteUrl, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(deleteData)
       })
         .then(response => {
           if (response.ok) {
@@ -100,6 +121,60 @@
           console.error('Error:', error);
         });
     }
+
+    // 更新批量删除按钮的状态
+    function updateDeleteSelectedButtonState() {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      const deleteSelectedButton = document.getElementById('deleteSelectedButton');
+
+      let isAnyCheckboxChecked = false;
+      checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+          isAnyCheckboxChecked = true;
+        }
+      });
+
+      deleteSelectedButton.disabled = !isAnyCheckboxChecked;
+    }
+
+    // 批量删除选中的item
+    function deleteSelectedItems() {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      const keys = [];
+
+      checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+          const key = checkbox.parentElement.nextElementSibling.textContent;
+          keys.push(key);
+        }
+      });
+
+      const deleteData = {
+        keys: keys
+      };
+
+      fetch(deleteUrl, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(deleteData)
+      })
+        .then(response => {
+          if (response.ok) {
+            alert('批量删除成功！');
+            location.reload(); // 刷新页面以更新表格
+          } else {
+            throw new Error('批量删除失败！');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+
+    const deleteSelectedButton = document.getElementById('deleteSelectedButton');
+    deleteSelectedButton.addEventListener('click', deleteSelectedItems);
   </script>
 </body>
 </html>
