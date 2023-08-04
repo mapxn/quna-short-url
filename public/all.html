@@ -193,37 +193,37 @@
 
     // 添加item
     function addItem() {
-      const urlInput = document.getElementById('urlInput');
-      const ckeyInput = document.getElementById('ckeyInput');
-
-      const value = urlInput.value;
-      const item_id = ckeyInput.value;
-
-      const postData = {
-        value: value
-      };
-
-      fetch(`${addUrl}/${item_id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(postData)
+    const urlInput = document.getElementById('urlInput');
+    const ckeyInput = document.getElementById('ckeyInput');
+  
+    const value = urlInput.value;
+    const item_id = ckeyInput.value;
+  
+    const postData = {
+      value: value
+    };
+  
+    fetch(`${addUrl}/${item_id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(postData)
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert(`${value}已经添加短链接https://quna.cf/${item_id} !`);
+          urlInput.value = '';
+          ckeyInput.value = '';
+        } else {
+          throw new Error(data.message);
+        }
       })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            alert(`${value}已经添加短链接https://quna.cf/${item_id} !`);
-            urlInput.value = '';
-            ckeyInput.value = '';
-          } else {
-            throw new Error(data.message);
-          }
-        })
-        .catch(error => {
-          alert('添加失败：' + error.message);
-        });
-    }
+      .catch(error => {
+        alert('添加失败：' + error.message);
+      });
+   }
 
     const deleteSelectedButton = document.getElementById('deleteSelectedButton');
     deleteSelectedButton.addEventListener('click', deleteSelectedItems);
