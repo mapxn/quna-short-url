@@ -65,7 +65,7 @@
           deleteButton.addEventListener('click', () => {
             const confirmDelete = confirm('确定要删除这个item吗？');
             if (confirmDelete) {
-              deleteItem(item.id, item.value);
+              deleteItem(item.id, item.key);
             }
           });
 
