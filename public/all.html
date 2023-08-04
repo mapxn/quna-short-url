@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Item列表</title>
+  <title>去哪短链接</title>
   <style>
     table {
       border-collapse: collapse;
@@ -17,18 +17,24 @@
     .add-form {
       margin-bottom: 20px;
     }
+
+    .title {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
-  <div class="add-form">
-    <label for="urlInput">URL:</label>
-    <input type="text" id="urlInput">
+  <h1 class="title">去哪短链接</h1>
 
-    <label for="ckeyInput">Ckey:</label>
-    <input type="text" id="ckeyInput">
-
-    <button id="addButton">添加</button>
-  </div>
+  <form id="myForm">
+    <label for="input1">URL:</label>
+    <input type="text" id="input1" name="input1" placeholder="请输入原始链接">
+    <label for="input2">Ckey:</label>
+    <input type="text" id="input2" name="input2" placeholder="请输入ckey">
+    <input type="submit" value="提交">
+  </form>
 
   <table>
     <thead>
@@ -49,7 +55,6 @@
   <script>
     const apiUrl = 'https://quna.cf/api/url/';
     const deleteUrl = 'https://quna.cf/api/url/';
-    const addUrl = 'https://quna.cf/api';
 
     // 使用fetch函数获取item数据
     fetch(apiUrl)
@@ -191,45 +196,51 @@
       }
     }
 
-    // 添加item
-    function addItem() {
-    const urlInput = document.getElementById('urlInput');
-    const ckeyInput = document.getElementById('ckeyInput');
-  
-    const value = urlInput.value;
-    const item_id = ckeyInput.value;
-  
-    const postData = {
-      value: value
-    };
-  
-    fetch(`${addUrl}/${item_id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(postData)
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          alert(`${value}已经添加短链接https://quna.cf/${item_id} !`);
-          urlInput.value = '';
-          ckeyInput.value = '';
-        } else {
-          throw new Error(data.message);
-        }
-      })
-      .catch(error => {
-        alert('添加失败：' + error.message);
-      });
-   }
-
     const deleteSelectedButton = document.getElementById('deleteSelectedButton');
     deleteSelectedButton.addEventListener('click', deleteSelectedItems);
 
-    const addButton = document.getElementById('addButton');
-    addButton.addEventListener('click', addItem);
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('myForm');
+
+      form.addEventListener('submit', function(event) {
+        event.preventDefault(); // 阻止表单提交的默认行为
+
+        // 获取输入框的值
+        const input1Value = document.getElementById('input1').value;
+        const input2Value = document.getElementById('input2').value;
+
+        // 构建请求的URL
+        const url = 'https://quna.cf/api/' + input2Value;
+
+        // 构建请求的数据
+        const data = {
+          value: input1Value
+        };
+
+        // 发送POST请求
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+          .then(response => {
+            if (response.ok) {
+              // 请求成功的处理逻辑
+              const shortLink = 'https://quna.cf/' + input2Value;
+              alert('已经生成短链接：' + shortLink);
+              location.reload(); // 刷新页面以更新表格
+            } else {
+              // 请求失败的处理逻辑
+              throw new Error('请求失败: ' + response.status);
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      });
+    });
   </script>
 </body>
 </html>
