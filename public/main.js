@@ -1,5 +1,5 @@
-    const apiUrl = 'https://quna.cf/api/url/';
-    const deleteUrl = 'https://quna.cf/api/url/';
+    const apiUrl = '/api/url/';
+    const deleteUrl = '/api/url/';
 
     // 转换时间格式为北京时间
     function convertToBeijingTime(utcTimeString) {
@@ -177,7 +177,7 @@
         const input2Value = document.getElementById('input2').value;
 
         // 构建请求的URL
-        const url = 'https://quna.cf/api/' + input2Value;
+        const url = '/api/' + input2Value;
 
         // 构建请求的数据
         const data = {
@@ -195,7 +195,7 @@
           .then(response => {
             if (response.ok) {
               // 请求成功的处理逻辑
-              const shortLink = 'https://quna.cf/' + input2Value;
+              const shortLink = window.location.href + input2Value;
               alert('已经生成短链接：' + shortLink);
               location.reload(); // 刷新页面以更新表格
             } else {
